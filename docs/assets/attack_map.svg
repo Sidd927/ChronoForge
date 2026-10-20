@@ -1,0 +1,64 @@
+<svg viewBox="0 0 620 268" width="1240" height="536" xmlns="http://www.w3.org/2000/svg" role="img" font-family="Avenir Next, Helvetica Neue, Helvetica, Arial, sans-serif" aria-label="Zone-level attack map of the synthetic Demo City twin with the verified plan's cut points">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C8402B"/></marker></defs>
+<rect x="0" y="0" width="620" height="268" rx="10" fill="#FFFFFF"/>
+<path d="M208.0,210.0 C330.0,210.0 420.0,150.0 420.0,62.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="1.64" marker-end="url(#ah)" marker-start="url(#ah)"/>
+<path d="M348.0,125.0 C370.0,125.0 370.0,38.0 392.0,38.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="5.16" marker-end="url(#ah)"/>
+<path d="M348.0,125.0 C370.0,125.0 370.0,210.0 392.0,210.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="2.52" marker-end="url(#ah)"/>
+<path d="M348.0,125.0 C437.0,125.0 437.0,168.0 526.0,168.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="1.86" marker-end="url(#ah)"/>
+<path d="M208.0,34.0 C300.0,34.0 300.0,38.0 392.0,38.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="1.42" marker-end="url(#ah)"/>
+<path d="M484.0,38.0 C505.0,38.0 505.0,58.0 526.0,58.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="3.18" marker-end="url(#ah)"/>
+<path d="M484.0,38.0 C505.0,38.0 505.0,168.0 526.0,168.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="3.18" marker-end="url(#ah)"/>
+<path d="M76.0,130.0 C98.0,130.0 98.0,210.0 120.0,210.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="1.42" marker-end="url(#ah)"/>
+<path d="M76.0,130.0 C98.0,130.0 98.0,34.0 120.0,34.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="1.42" marker-end="url(#ah)"/>
+<path d="M76.0,130.0 C98.0,130.0 98.0,120.0 120.0,120.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="1.42" marker-end="url(#ah)"/>
+<path d="M41.0,156 C41.0,228 61.0,258 101.0,258 L530.0,258 C560.0,258 570.0,233 570.0,196" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="1.42" marker-end="url(#ah)"/>
+<path d="M484.0,210.0 C505.0,210.0 505.0,58.0 526.0,58.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="1.86" marker-end="url(#ah)"/>
+<path d="M208.0,120.0 C230.0,120.0 230.0,125.0 252.0,125.0" fill="none" stroke="#C8402B" stroke-opacity="0.72" stroke-width="2.30" marker-end="url(#ah)"/>
+<rect x="6" y="104" width="70" height="52" rx="7" fill="#FFFFFF" stroke="#D5DAE3" stroke-width="1.1"/>
+<text x="41.0" y="128.0" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0F1B2D">Internet</text>
+<text x="41.0" y="140.0" text-anchor="middle" font-size="8" fill="#5B6577">attacker</text>
+<rect x="120" y="14" width="88" height="40" rx="7" fill="#FFFFFF" stroke="#D5DAE3" stroke-width="1.1"/>
+<text x="164.0" y="32.0" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0F1B2D">DMZ</text>
+<text x="164.0" y="44.0" text-anchor="middle" font-size="8" fill="#5B6577">citizen portal</text>
+<rect x="120" y="100" width="88" height="40" rx="7" fill="#FFFFFF" stroke="#D5DAE3" stroke-width="1.1"/>
+<text x="164.0" y="118.0" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0F1B2D">Vendor VPN</text>
+<text x="164.0" y="130.0" text-anchor="middle" font-size="8" fill="#5B6577">SSL-VPN</text>
+<rect x="120" y="190" width="88" height="40" rx="7" fill="#FFFFFF" stroke="#D5DAE3" stroke-width="1.1"/>
+<text x="164.0" y="208.0" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0F1B2D">CCTV</text>
+<text x="164.0" y="220.0" text-anchor="middle" font-size="8" fill="#5B6577">cameras · NVR</text>
+<rect x="252" y="92" width="96" height="66" rx="7" fill="#FFFFFF" stroke="#D5DAE3" stroke-width="1.1"/>
+<text x="300.0" y="123.0" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0F1B2D">Corporate IT</text>
+<text x="300.0" y="135.0" text-anchor="middle" font-size="8" fill="#5B6577">6 hosts</text>
+<rect x="392" y="14" width="92" height="48" rx="7" fill="#FFFFFF" stroke="#D5DAE3" stroke-width="1.1"/>
+<text x="438.0" y="36.0" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0F1B2D">ICCC</text>
+<text x="438.0" y="48.0" text-anchor="middle" font-size="8" fill="#5B6577">API · VMS · DB</text>
+<rect x="392" y="190" width="92" height="40" rx="7" fill="#FFFFFF" stroke="#D5DAE3" stroke-width="1.1"/>
+<text x="438.0" y="208.0" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0F1B2D">Streetlight IoT</text>
+<text x="438.0" y="220.0" text-anchor="middle" font-size="8" fill="#5B6577">gateway</text>
+<rect x="526" y="30" width="88" height="56" rx="7" fill="#FDF1EE" stroke="#C8402B" stroke-width="1.6"/>
+<text x="570.0" y="61.0" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0F1B2D">Traffic OT</text>
+<text x="570.0" y="73.0" text-anchor="middle" font-size="8" fill="#5B6577">signal controllers</text>
+<text x="534" y="41" font-size="6.8" font-weight="700" letter-spacing="0.6" fill="#C8402B">CRITICAL</text>
+<rect x="526" y="140" width="88" height="56" rx="7" fill="#FDF1EE" stroke="#C8402B" stroke-width="1.6"/>
+<text x="570.0" y="171.0" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0F1B2D">Water OT</text>
+<text x="570.0" y="183.0" text-anchor="middle" font-size="8" fill="#5B6577">pumping PLCs</text>
+<text x="534" y="151" font-size="6.8" font-weight="700" letter-spacing="0.6" fill="#C8402B">CRITICAL</text>
+<rect x="262" y="143" width="76" height="12" rx="6" fill="#C8402B" fill-opacity="0.12"/>
+<text x="300.0" y="151.8" text-anchor="middle" font-size="7.5" font-weight="600" fill="#C8402B">origin 2: phished PC</text>
+<circle cx="200.0" cy="100.0" r="7.2" fill="#0B7A55" stroke="#fff" stroke-width="1.5"/>
+<text x="200.0" y="103.1" text-anchor="middle" font-size="8.5" font-weight="700" fill="#fff">1</text>
+<circle cx="330.0" cy="258.0" r="7.2" fill="#0B7A55" stroke="#fff" stroke-width="1.5"/>
+<text x="330.0" y="261.1" text-anchor="middle" font-size="8.5" font-weight="700" fill="#fff">2</text>
+<circle cx="340.0" cy="92.0" r="7.2" fill="#0B7A55" stroke="#fff" stroke-width="1.5"/>
+<text x="340.0" y="95.1" text-anchor="middle" font-size="8.5" font-weight="700" fill="#fff">3</text>
+<circle cx="505.0" cy="48.0" r="7.2" fill="#0B7A55" stroke="#fff" stroke-width="1.5"/>
+<text x="505.0" y="51.1" text-anchor="middle" font-size="8.5" font-weight="700" fill="#fff">4</text>
+<circle cx="505.0" cy="103.0" r="7.2" fill="#0B7A55" stroke="#fff" stroke-width="1.5"/>
+<text x="505.0" y="106.1" text-anchor="middle" font-size="8.5" font-weight="700" fill="#fff">5</text>
+<circle cx="505.0" cy="134.0" r="7.2" fill="#0B7A55" stroke="#fff" stroke-width="1.5"/>
+<text x="505.0" y="137.1" text-anchor="middle" font-size="8.5" font-weight="700" fill="#fff">6</text>
+<circle cx="606.0" cy="30.0" r="7.2" fill="#0B7A55" stroke="#fff" stroke-width="1.5"/>
+<text x="606.0" y="33.1" text-anchor="middle" font-size="8.5" font-weight="700" fill="#fff">7</text>
+<circle cx="606.0" cy="140.0" r="7.2" fill="#0B7A55" stroke="#fff" stroke-width="1.5"/>
+<text x="606.0" y="143.1" text-anchor="middle" font-size="8.5" font-weight="700" fill="#fff">8</text>
+</svg>

@@ -39,6 +39,7 @@ class Twin:
     required_flows: list
     meta: dict = field(default_factory=dict)
     origins: list = field(default_factory=lambda: ["internet"])
+    _req_cache: dict = field(default_factory=dict, init=False, repr=False)
 
     @classmethod
     def load(cls, path: str | Path) -> "Twin":
@@ -146,19 +147,15 @@ class State:
         return g
 
 
-_REQ_CACHE: dict[tuple[int, str], set] = {}
-
-
 def required_set(twin: Twin, rule_id: str) -> set:
-    """Required flows carried by `rule_id` in the unmodified twin."""
-    key = (id(twin), rule_id)
-    if key not in _REQ_CACHE:
+    """Required flows carried by `rule_id` in the unmodified twin (cached per twin)."""
+    if rule_id not in twin._req_cache:
         base = State(twin)
-        _REQ_CACHE[key] = {
+        twin._req_cache[rule_id] = {
             (f["src"], f["dst"], f["port"]) for f in twin.required_flows
             if rule_id in base.allowing_rules(f["src"], f["dst"], f["port"])
         }
-    return _REQ_CACHE[key]
+    return twin._req_cache[rule_id]
 
 
 # --------------------------------------------------------------- analysis ---
@@ -244,14 +241,16 @@ def actions_for_reason(twin: Twin, reason: dict) -> list[Action]:
 
 
 def unsafe_actions(twin: Twin) -> list[dict]:
-    """Rule removals a naive operator might try that would break city services."""
+    """Rules whose outright removal would break at least one required flow.
+
+    The planner never offers these removals; it may only restrict such a rule
+    to the required flows it carries."""
     out = []
     for r in twin.rules:
-        carried = required_set(twin, r["id"])
-        if carried:
-            st = State(twin, [Action("remove_rule", r["id"], 0, "")])
-            out.append({"rule": r["id"], "label": r["label"],
-                        "breaks": [f["why"] for f in broken_flows(st)]})
+        if required_set(twin, r["id"]):
+            broken = broken_flows(State(twin, [Action("remove_rule", r["id"], 0, "")]))
+            if broken:
+                out.append({"rule": r["id"], "label": r["label"], "breaks": [f["why"] for f in broken]})
     return out
 
 
@@ -274,13 +273,18 @@ def mandatory_actions(twin: Twin) -> list[Action]:
     return list(out.values())
 
 
-def plan_min_cut(twin: Twin, node_limit: int = 200_000) -> dict:
+ALL_KINDS = frozenset({"remediate", "remove_rule", "restrict_rule", "vault_creds"})
+
+
+def plan_min_cut(twin: Twin, kinds=ALL_KINDS, node_limit: int = 200_000) -> dict:
     """Exact minimum-cost hitting set of attack paths via branch and bound.
 
     Correctness: any feasible plan must sever the current shortest attack
     path, so it must neutralise every reason on at least one of its edges and
     therefore contains at least one action generated for that path.
     Branching on exactly those actions explores every minimal plan.
+    Optimality is relative to the action model (the candidate actions and their
+    costs); `kinds` restricts which action types may be used.
     """
     crit = set(twin.critical)
     best = {"key": (float("inf"), 0), "actions": ()}
@@ -307,12 +311,15 @@ def plan_min_cut(twin: Twin, node_limit: int = 200_000) -> dict:
         for u, v in zip(path, path[1:]):
             for reason in g[u][v]:
                 for a in actions_for_reason(twin, reason):
-                    cand.setdefault(a.key(), a)
+                    if a.kind in kinds:
+                        cand.setdefault(a.key(), a)
         for a in sorted(cand.values(), key=lambda a: a.cost):
             search(actions + (a,), round(cost + a.cost, 2))
 
     seed = tuple(mandatory_actions(twin))
     search(seed, round(sum(a.cost for a in seed), 2))
+    if not best["actions"] and best["key"][0] == float("inf"):
+        raise RuntimeError("no feasible plan with the allowed action kinds")
     return {"actions": list(best["actions"]), "cost": best["key"][0],
             "mandatory": [a.key() for a in seed], "states_explored": expanded}
 
@@ -357,6 +364,7 @@ def analyse(twin: Twin) -> dict:
     epss = lambda x: (-fd[x[1]]["epss"], -fd[x[1]]["cvss"], x)
     edges0 = [(u, v, rs) for u in g0 for v, rs in g0[u].items()]
     by_origin = {o: count_paths(g0, twin.critical, [o]) for o in twin.origins}
+    rem_only = plan_min_cut(twin, kinds=frozenset({"remediate", "vault_creds"}))
     return {
         "twin": twin.meta.get("name"),
         "origins": twin.origins,
@@ -379,6 +387,15 @@ def analyse(twin: Twin) -> dict:
         "states_explored": plan["states_explored"],
         "verification": check,
         "unsafe_naive_actions": unsafe_actions(twin),
+        "rules_total": len(twin.rules),
+        "remediation_only_optimum": {"fixes": len(rem_only["actions"]), "cost": rem_only["cost"],
+                                     "actions": [a.label for a in rem_only["actions"]]},
+        "path_definition": (f"simple paths of at most {PATH_CUTOFF} edges from any origin to a critical asset, "
+                            "stopping at the first critical asset reached; counted separately per origin and summed"),
+        "paths_by_hop_limit": {k: count_paths(g0, twin.critical, twin.origins, cutoff=k) for k in (2, 4, 6, 8, 10)},
+        "cost_model": f"weighted hours = engineer effort + {DOWNTIME_WEIGHT:g} x service downtime; "
+                      f"rule removal {RULE_REMOVE_COST} h, rule restriction {RULE_RESTRICT_COST} h, "
+                      f"credential vaulting {CRED_VAULT_COST} h (assumed estimates)",
         "baselines": [
             baseline_ordered(twin, cvss, "CVSS-ordered patching"),
             baseline_ordered(twin, kev, "KEV-first, then CVSS"),

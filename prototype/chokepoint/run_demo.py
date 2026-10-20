@@ -9,6 +9,7 @@ import time
 from pathlib import Path
 
 from chokepoint.engine import Twin, analyse
+from chokepoint.figure import build_svg
 
 HERE = Path(__file__).parent
 
@@ -23,11 +24,16 @@ def main() -> int:
     out = HERE / "out"
     out.mkdir(exist_ok=True)
     (out / "results.json").write_text(json.dumps(res, indent=2))
+    try:
+        (out / "attack_map.svg").write_text(build_svg(res, twin))
+    except ValueError as exc:  # custom twins with other zones: report still works, figure skipped
+        print(f"(attack map skipped: {exc})")
 
     b = res["before"]
     print(f"Twin: {res['twin']}  ({res['assets']} assets, {res['scanner_findings']} scanner findings, {res['kev_findings']} KEV)")
-    print(f"BEFORE: {len(b['critical_reachable'])}/{len(res['critical_assets'])} critical assets reachable from {res['origins']}, "
-          f"{b['attack_paths']} attack paths")
+    print(f"BEFORE: {len(b['critical_reachable'])}/{len(res['critical_assets'])} critical assets reachable from {res['origins']}; "
+          f"{b['attack_paths']:,} attack paths*")
+    print("  attack paths by hop limit: " + ", ".join(f"<={k}: {v:,}" for k, v in res["paths_by_hop_limit"].items()))
     print("  e.g.  " + " -> ".join(b["example_path"]))
     print(f"\nPLAN ({len(res['plan'])} actions, cost {res['plan_cost']}, {res['states_explored']} states explored):")
     for i, a in enumerate(res["plan"], 1):
@@ -37,11 +43,16 @@ def main() -> int:
           f"broken required flows={v['broken_required_flows']}  -> {'PASS' if v['passed'] else 'FAIL'}")
     print("\nBASELINES (fixing scanner findings in score order until zero attack paths):")
     for bl in res["baselines"]:
-        print(f"  {bl['name']:<24} {bl['fixes']:>2} fixes, cost {bl['cost']}")
-    print(f"\nUnsafe naive rule removals rejected: {len(res['unsafe_naive_actions'])}")
-    for u in res["unsafe_naive_actions"][:4]:
+        print(f"  {bl['name']:<30} {bl['fixes']:>2} fixes, cost {bl['cost']}")
+    ro = res["remediation_only_optimum"]
+    print(f"  {'Optimal, patch/credential only':<30} {ro['fixes']:>2} fixes, cost {ro['cost']}")
+    print(f"  {'CHOKEPOINT (all action types)':<30} {len(res['plan']):>2} fixes, cost {res['plan_cost']}")
+    print(f"\nRules carrying a required flow (never removed, only restricted): "
+          f"{len(res['unsafe_naive_actions'])} of {res['rules_total']}")
+    for u in res["unsafe_naive_actions"][:3]:
         print(f"  - removing {u['rule']} ({u['label']}) would break: {'; '.join(u['breaks'])}")
-    print(f"\nRuntime: {res['runtime_s']} s  ->  {out / 'results.json'}")
+    print(f"\n* {res['path_definition']}.\n  Cost model: {res['cost_model']}.")
+    print(f"\nRuntime: {res['runtime_s']} s  ->  out/results.json, out/attack_map.svg")
     return 0 if v["passed"] else 1
 
 
