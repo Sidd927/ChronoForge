@@ -1,0 +1,1677 @@
+{
+  "twin": "Demo City digital twin (SYNTHETIC)",
+  "origins": [
+    "internet",
+    "clerk_pc"
+  ],
+  "assets": 20,
+  "scanner_findings": 19,
+  "kev_findings": 4,
+  "required_flows": 19,
+  "critical_assets": [
+    {
+      "id": "signal_ctrl_a",
+      "name": "Signal controllers - Corridor A",
+      "impact": "18 signalised junctions on Corridor A"
+    },
+    {
+      "id": "signal_ctrl_b",
+      "name": "Signal controllers - Corridor B",
+      "impact": "14 signalised junctions on Corridor B"
+    },
+    {
+      "id": "plc_pump_1",
+      "name": "Pumping Station 1 PLC (Unitronics)",
+      "impact": "Pumping Station 1 - drinking-water supply, Zone North"
+    },
+    {
+      "id": "plc_pump_2",
+      "name": "Pumping Station 2 PLC (Rockwell)",
+      "impact": "Pumping Station 2 - drinking-water supply, Zone South"
+    }
+  ],
+  "before": {
+    "critical_reachable": [
+      "plc_pump_1",
+      "plc_pump_2",
+      "signal_ctrl_a",
+      "signal_ctrl_b"
+    ],
+    "attack_paths": 123709,
+    "attack_paths_by_origin": {
+      "internet": 55569,
+      "clerk_pc": 68140
+    },
+    "attack_edges": 109,
+    "example_path": [
+      "internet",
+      "plc_pump_1"
+    ]
+  },
+  "plan": [
+    {
+      "kind": "remediate",
+      "target": "vpn_gw:CVE-2018-13379",
+      "cost": 5.0,
+      "label": "Upgrade FortiOS and reset all VPN credentials on Vendor SSL-VPN gateway (CVE-2018-13379)",
+      "mandatory": true
+    },
+    {
+      "kind": "remove_rule",
+      "target": "R04",
+      "cost": 0.5,
+      "label": "Remove firewall rule R04 (PLC exposed for vendor remote maintenance)",
+      "mandatory": false
+    },
+    {
+      "kind": "remediate",
+      "target": "eng_ws:SYN-004",
+      "cost": 1.0,
+      "label": "Rotate credentials, enforce NLA + MFA on Utility engineering workstation (SYN-004)",
+      "mandatory": false
+    },
+    {
+      "kind": "restrict_rule",
+      "target": "R11",
+      "cost": 1.5,
+      "label": "Restrict rule R11 (ICCC -> traffic OT) to its 1 required flow(s)",
+      "mandatory": false
+    },
+    {
+      "kind": "restrict_rule",
+      "target": "R12",
+      "cost": 1.5,
+      "label": "Restrict rule R12 (ICCC -> water OT (broad)) to its 1 required flow(s)",
+      "mandatory": false
+    },
+    {
+      "kind": "remove_rule",
+      "target": "R15",
+      "cost": 0.5,
+      "label": "Remove firewall rule R15 (Shared pole fibre: streetlight -> traffic (flat))",
+      "mandatory": false
+    },
+    {
+      "kind": "remediate",
+      "target": "atcs:SYN-005",
+      "cost": 1.0,
+      "label": "Rotate default admin credentials on Adaptive traffic control server (SYN-005)",
+      "mandatory": false
+    },
+    {
+      "kind": "remediate",
+      "target": "scada_hmi:SYN-008",
+      "cost": 1.0,
+      "label": "Enable VNC authentication on Water SCADA HMI (SYN-008)",
+      "mandatory": false
+    }
+  ],
+  "plan_cost": 12.0,
+  "states_explored": 96,
+  "verification": {
+    "critical_reachable": [],
+    "attack_paths": 0,
+    "broken_required_flows": [],
+    "passed": true
+  },
+  "unsafe_naive_actions": [
+    {
+      "rule": "R01",
+      "label": "Public portal",
+      "breaks": [
+        "Citizens reach public services"
+      ]
+    },
+    {
+      "rule": "R02",
+      "label": "Vendor VPN",
+      "breaks": [
+        "Vendors reach VPN"
+      ]
+    },
+    {
+      "rule": "R05",
+      "label": "Flat VPN into corporate IT",
+      "breaks": [
+        "Remote staff reach webmail over VPN"
+      ]
+    },
+    {
+      "rule": "R06",
+      "label": "Portal -> ICCC API",
+      "breaks": [
+        "Portal shows live civic data"
+      ]
+    },
+    {
+      "rule": "R07",
+      "label": "Corporate LAN",
+      "breaks": [
+        "Staff use the file share",
+        "Staff use webmail",
+        "Staff use HR / payroll",
+        "Staff print"
+      ]
+    },
+    {
+      "rule": "R08",
+      "label": "Corporate IT -> ICCC (broad)",
+      "breaks": [
+        "Staff view ICCC video dashboards"
+      ]
+    },
+    {
+      "rule": "R09",
+      "label": "ICCC -> cameras / NVR",
+      "breaks": [
+        "VMS pulls camera stream"
+      ]
+    },
+    {
+      "rule": "R10",
+      "label": "Cameras / NVR -> VMS",
+      "breaks": [
+        "Video reaches command centre"
+      ]
+    },
+    {
+      "rule": "R11",
+      "label": "ICCC -> traffic OT",
+      "breaks": [
+        "ICCC reads traffic status"
+      ]
+    },
+    {
+      "rule": "R12",
+      "label": "ICCC -> water OT (broad)",
+      "breaks": [
+        "ICCC water dashboard view"
+      ]
+    },
+    {
+      "rule": "R13",
+      "label": "Engineering access to water OT",
+      "breaks": [
+        "Engineers program Pump 2"
+      ]
+    },
+    {
+      "rule": "R14",
+      "label": "IT admin -> streetlights",
+      "breaks": [
+        "Engineers administer streetlight gateway"
+      ]
+    },
+    {
+      "rule": "R16",
+      "label": "Traffic OT LAN",
+      "breaks": [
+        "ATCS retimes Corridor A signals",
+        "ATCS retimes Corridor B signals"
+      ]
+    },
+    {
+      "rule": "R17",
+      "label": "Water OT LAN",
+      "breaks": [
+        "HMI supervises Pump 1",
+        "HMI supervises Pump 2"
+      ]
+    }
+  ],
+  "baselines": [
+    {
+      "name": "CVSS-ordered patching",
+      "fixes": 16,
+      "cost": 69.0,
+      "zero_paths": true
+    },
+    {
+      "name": "KEV-first, then CVSS",
+      "fixes": 16,
+      "cost": 69.0,
+      "zero_paths": true
+    },
+    {
+      "name": "EPSS-ordered patching",
+      "fixes": 19,
+      "cost": 87.0,
+      "zero_paths": true
+    }
+  ],
+  "graph_before": [
+    {
+      "src": "internet",
+      "dst": "citizen_portal",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R01",
+          "finding": "SYN-001",
+          "port": 443,
+          "dst": "citizen_portal"
+        }
+      ]
+    },
+    {
+      "src": "internet",
+      "dst": "vpn_gw",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R02",
+          "finding": "CVE-2018-13379",
+          "port": 443,
+          "dst": "vpn_gw"
+        }
+      ]
+    },
+    {
+      "src": "internet",
+      "dst": "cam_07",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R03",
+          "finding": "CVE-2021-36260",
+          "port": 80,
+          "dst": "cam_07"
+        }
+      ]
+    },
+    {
+      "src": "internet",
+      "dst": "plc_pump_1",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R04",
+          "finding": "CVE-2023-6448",
+          "port": 20256,
+          "dst": "plc_pump_1"
+        }
+      ]
+    },
+    {
+      "src": "citizen_portal",
+      "dst": "iccc_api",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R06",
+          "finding": "SYN-002",
+          "port": 8443,
+          "dst": "iccc_api"
+        }
+      ]
+    },
+    {
+      "src": "vpn_gw",
+      "dst": "file_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R05",
+          "finding": "SYN-003",
+          "port": 445,
+          "dst": "file_server"
+        }
+      ]
+    },
+    {
+      "src": "vpn_gw",
+      "dst": "mail_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R05",
+          "finding": "SYN-010",
+          "port": 443,
+          "dst": "mail_server"
+        }
+      ]
+    },
+    {
+      "src": "vpn_gw",
+      "dst": "hr_portal",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R05",
+          "finding": "SYN-011",
+          "port": 8080,
+          "dst": "hr_portal"
+        }
+      ]
+    },
+    {
+      "src": "vpn_gw",
+      "dst": "print_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R05",
+          "finding": "SYN-012",
+          "port": 9100,
+          "dst": "print_server"
+        }
+      ]
+    },
+    {
+      "src": "vpn_gw",
+      "dst": "eng_ws",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R05",
+          "finding": "SYN-004",
+          "port": 3389,
+          "dst": "eng_ws"
+        }
+      ]
+    },
+    {
+      "src": "file_server",
+      "dst": "mail_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-010",
+          "port": 443,
+          "dst": "mail_server"
+        }
+      ]
+    },
+    {
+      "src": "file_server",
+      "dst": "hr_portal",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-011",
+          "port": 8080,
+          "dst": "hr_portal"
+        }
+      ]
+    },
+    {
+      "src": "file_server",
+      "dst": "print_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-012",
+          "port": 9100,
+          "dst": "print_server"
+        }
+      ]
+    },
+    {
+      "src": "file_server",
+      "dst": "eng_ws",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-004",
+          "port": 3389,
+          "dst": "eng_ws"
+        }
+      ]
+    },
+    {
+      "src": "file_server",
+      "dst": "iccc_api",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-002",
+          "port": 8443,
+          "dst": "iccc_api"
+        }
+      ]
+    },
+    {
+      "src": "file_server",
+      "dst": "iccc_vms",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-009",
+          "port": 443,
+          "dst": "iccc_vms"
+        }
+      ]
+    },
+    {
+      "src": "file_server",
+      "dst": "iccc_db",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-013",
+          "port": 5432,
+          "dst": "iccc_db"
+        }
+      ]
+    },
+    {
+      "src": "file_server",
+      "dst": "light_gw",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R14",
+          "finding": "SYN-007",
+          "port": 22,
+          "dst": "light_gw"
+        }
+      ]
+    },
+    {
+      "src": "mail_server",
+      "dst": "file_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-003",
+          "port": 445,
+          "dst": "file_server"
+        }
+      ]
+    },
+    {
+      "src": "mail_server",
+      "dst": "hr_portal",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-011",
+          "port": 8080,
+          "dst": "hr_portal"
+        }
+      ]
+    },
+    {
+      "src": "mail_server",
+      "dst": "print_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-012",
+          "port": 9100,
+          "dst": "print_server"
+        }
+      ]
+    },
+    {
+      "src": "mail_server",
+      "dst": "eng_ws",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-004",
+          "port": 3389,
+          "dst": "eng_ws"
+        }
+      ]
+    },
+    {
+      "src": "mail_server",
+      "dst": "iccc_api",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-002",
+          "port": 8443,
+          "dst": "iccc_api"
+        }
+      ]
+    },
+    {
+      "src": "mail_server",
+      "dst": "iccc_vms",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-009",
+          "port": 443,
+          "dst": "iccc_vms"
+        }
+      ]
+    },
+    {
+      "src": "mail_server",
+      "dst": "iccc_db",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-013",
+          "port": 5432,
+          "dst": "iccc_db"
+        }
+      ]
+    },
+    {
+      "src": "mail_server",
+      "dst": "light_gw",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R14",
+          "finding": "SYN-007",
+          "port": 22,
+          "dst": "light_gw"
+        }
+      ]
+    },
+    {
+      "src": "hr_portal",
+      "dst": "file_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-003",
+          "port": 445,
+          "dst": "file_server"
+        }
+      ]
+    },
+    {
+      "src": "hr_portal",
+      "dst": "mail_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-010",
+          "port": 443,
+          "dst": "mail_server"
+        }
+      ]
+    },
+    {
+      "src": "hr_portal",
+      "dst": "print_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-012",
+          "port": 9100,
+          "dst": "print_server"
+        }
+      ]
+    },
+    {
+      "src": "hr_portal",
+      "dst": "eng_ws",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-004",
+          "port": 3389,
+          "dst": "eng_ws"
+        }
+      ]
+    },
+    {
+      "src": "hr_portal",
+      "dst": "iccc_api",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-002",
+          "port": 8443,
+          "dst": "iccc_api"
+        }
+      ]
+    },
+    {
+      "src": "hr_portal",
+      "dst": "iccc_vms",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-009",
+          "port": 443,
+          "dst": "iccc_vms"
+        }
+      ]
+    },
+    {
+      "src": "hr_portal",
+      "dst": "iccc_db",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-013",
+          "port": 5432,
+          "dst": "iccc_db"
+        }
+      ]
+    },
+    {
+      "src": "hr_portal",
+      "dst": "light_gw",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R14",
+          "finding": "SYN-007",
+          "port": 22,
+          "dst": "light_gw"
+        }
+      ]
+    },
+    {
+      "src": "print_server",
+      "dst": "file_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-003",
+          "port": 445,
+          "dst": "file_server"
+        }
+      ]
+    },
+    {
+      "src": "print_server",
+      "dst": "mail_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-010",
+          "port": 443,
+          "dst": "mail_server"
+        }
+      ]
+    },
+    {
+      "src": "print_server",
+      "dst": "hr_portal",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-011",
+          "port": 8080,
+          "dst": "hr_portal"
+        }
+      ]
+    },
+    {
+      "src": "print_server",
+      "dst": "eng_ws",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-004",
+          "port": 3389,
+          "dst": "eng_ws"
+        }
+      ]
+    },
+    {
+      "src": "print_server",
+      "dst": "iccc_api",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-002",
+          "port": 8443,
+          "dst": "iccc_api"
+        }
+      ]
+    },
+    {
+      "src": "print_server",
+      "dst": "iccc_vms",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-009",
+          "port": 443,
+          "dst": "iccc_vms"
+        }
+      ]
+    },
+    {
+      "src": "print_server",
+      "dst": "iccc_db",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-013",
+          "port": 5432,
+          "dst": "iccc_db"
+        }
+      ]
+    },
+    {
+      "src": "print_server",
+      "dst": "light_gw",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R14",
+          "finding": "SYN-007",
+          "port": 22,
+          "dst": "light_gw"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "file_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-003",
+          "port": 445,
+          "dst": "file_server"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "mail_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-010",
+          "port": 443,
+          "dst": "mail_server"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "hr_portal",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-011",
+          "port": 8080,
+          "dst": "hr_portal"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "print_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-012",
+          "port": 9100,
+          "dst": "print_server"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "iccc_api",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-002",
+          "port": 8443,
+          "dst": "iccc_api"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "iccc_vms",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-009",
+          "port": 443,
+          "dst": "iccc_vms"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "iccc_db",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-013",
+          "port": 5432,
+          "dst": "iccc_db"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "scada_hmi",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R13",
+          "finding": "SYN-008",
+          "port": 5900,
+          "dst": "scada_hmi"
+        },
+        {
+          "type": "stored_creds",
+          "rule": "R13",
+          "finding": null,
+          "port": 5900,
+          "dst": "scada_hmi",
+          "holder": "eng_ws"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "plc_pump_1",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R13",
+          "finding": "CVE-2023-6448",
+          "port": 20256,
+          "dst": "plc_pump_1"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "plc_pump_2",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R13",
+          "finding": "CVE-2021-22681",
+          "port": 44818,
+          "dst": "plc_pump_2"
+        },
+        {
+          "type": "stored_creds",
+          "rule": "R13",
+          "finding": null,
+          "port": 44818,
+          "dst": "plc_pump_2",
+          "holder": "eng_ws"
+        }
+      ]
+    },
+    {
+      "src": "eng_ws",
+      "dst": "light_gw",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R14",
+          "finding": "SYN-007",
+          "port": 22,
+          "dst": "light_gw"
+        }
+      ]
+    },
+    {
+      "src": "clerk_pc",
+      "dst": "file_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-003",
+          "port": 445,
+          "dst": "file_server"
+        }
+      ]
+    },
+    {
+      "src": "clerk_pc",
+      "dst": "mail_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-010",
+          "port": 443,
+          "dst": "mail_server"
+        }
+      ]
+    },
+    {
+      "src": "clerk_pc",
+      "dst": "hr_portal",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-011",
+          "port": 8080,
+          "dst": "hr_portal"
+        }
+      ]
+    },
+    {
+      "src": "clerk_pc",
+      "dst": "print_server",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-012",
+          "port": 9100,
+          "dst": "print_server"
+        }
+      ]
+    },
+    {
+      "src": "clerk_pc",
+      "dst": "eng_ws",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R07",
+          "finding": "SYN-004",
+          "port": 3389,
+          "dst": "eng_ws"
+        }
+      ]
+    },
+    {
+      "src": "clerk_pc",
+      "dst": "iccc_api",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-002",
+          "port": 8443,
+          "dst": "iccc_api"
+        }
+      ]
+    },
+    {
+      "src": "clerk_pc",
+      "dst": "iccc_vms",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-009",
+          "port": 443,
+          "dst": "iccc_vms"
+        }
+      ]
+    },
+    {
+      "src": "clerk_pc",
+      "dst": "iccc_db",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R08",
+          "finding": "SYN-013",
+          "port": 5432,
+          "dst": "iccc_db"
+        }
+      ]
+    },
+    {
+      "src": "clerk_pc",
+      "dst": "light_gw",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R14",
+          "finding": "SYN-007",
+          "port": 22,
+          "dst": "light_gw"
+        }
+      ]
+    },
+    {
+      "src": "iccc_api",
+      "dst": "iccc_vms",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R18",
+          "finding": "SYN-009",
+          "port": 443,
+          "dst": "iccc_vms"
+        }
+      ]
+    },
+    {
+      "src": "iccc_api",
+      "dst": "iccc_db",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R18",
+          "finding": "SYN-013",
+          "port": 5432,
+          "dst": "iccc_db"
+        }
+      ]
+    },
+    {
+      "src": "iccc_api",
+      "dst": "cam_07",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R09",
+          "finding": "CVE-2021-36260",
+          "port": 80,
+          "dst": "cam_07"
+        }
+      ]
+    },
+    {
+      "src": "iccc_api",
+      "dst": "nvr_01",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R09",
+          "finding": "SYN-014",
+          "port": 8000,
+          "dst": "nvr_01"
+        }
+      ]
+    },
+    {
+      "src": "iccc_api",
+      "dst": "atcs",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R11",
+          "finding": "SYN-005",
+          "port": 443,
+          "dst": "atcs"
+        }
+      ]
+    },
+    {
+      "src": "iccc_api",
+      "dst": "signal_ctrl_a",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R11",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_a"
+        }
+      ]
+    },
+    {
+      "src": "iccc_api",
+      "dst": "signal_ctrl_b",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R11",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_b"
+        }
+      ]
+    },
+    {
+      "src": "iccc_api",
+      "dst": "scada_hmi",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R12",
+          "finding": "SYN-008",
+          "port": 5900,
+          "dst": "scada_hmi"
+        }
+      ]
+    },
+    {
+      "src": "iccc_api",
+      "dst": "plc_pump_1",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R12",
+          "finding": "CVE-2023-6448",
+          "port": 20256,
+          "dst": "plc_pump_1"
+        }
+      ]
+    },
+    {
+      "src": "iccc_api",
+      "dst": "plc_pump_2",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R12",
+          "finding": "CVE-2021-22681",
+          "port": 44818,
+          "dst": "plc_pump_2"
+        }
+      ]
+    },
+    {
+      "src": "iccc_vms",
+      "dst": "iccc_api",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R18",
+          "finding": "SYN-002",
+          "port": 8443,
+          "dst": "iccc_api"
+        }
+      ]
+    },
+    {
+      "src": "iccc_vms",
+      "dst": "iccc_db",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R18",
+          "finding": "SYN-013",
+          "port": 5432,
+          "dst": "iccc_db"
+        }
+      ]
+    },
+    {
+      "src": "iccc_vms",
+      "dst": "cam_07",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R09",
+          "finding": "CVE-2021-36260",
+          "port": 80,
+          "dst": "cam_07"
+        }
+      ]
+    },
+    {
+      "src": "iccc_vms",
+      "dst": "nvr_01",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R09",
+          "finding": "SYN-014",
+          "port": 8000,
+          "dst": "nvr_01"
+        }
+      ]
+    },
+    {
+      "src": "iccc_vms",
+      "dst": "atcs",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R11",
+          "finding": "SYN-005",
+          "port": 443,
+          "dst": "atcs"
+        }
+      ]
+    },
+    {
+      "src": "iccc_vms",
+      "dst": "signal_ctrl_a",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R11",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_a"
+        }
+      ]
+    },
+    {
+      "src": "iccc_vms",
+      "dst": "signal_ctrl_b",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R11",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_b"
+        }
+      ]
+    },
+    {
+      "src": "iccc_vms",
+      "dst": "scada_hmi",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R12",
+          "finding": "SYN-008",
+          "port": 5900,
+          "dst": "scada_hmi"
+        }
+      ]
+    },
+    {
+      "src": "iccc_vms",
+      "dst": "plc_pump_1",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R12",
+          "finding": "CVE-2023-6448",
+          "port": 20256,
+          "dst": "plc_pump_1"
+        }
+      ]
+    },
+    {
+      "src": "iccc_vms",
+      "dst": "plc_pump_2",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R12",
+          "finding": "CVE-2021-22681",
+          "port": 44818,
+          "dst": "plc_pump_2"
+        }
+      ]
+    },
+    {
+      "src": "iccc_db",
+      "dst": "iccc_api",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R18",
+          "finding": "SYN-002",
+          "port": 8443,
+          "dst": "iccc_api"
+        }
+      ]
+    },
+    {
+      "src": "iccc_db",
+      "dst": "iccc_vms",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R18",
+          "finding": "SYN-009",
+          "port": 443,
+          "dst": "iccc_vms"
+        }
+      ]
+    },
+    {
+      "src": "iccc_db",
+      "dst": "cam_07",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R09",
+          "finding": "CVE-2021-36260",
+          "port": 80,
+          "dst": "cam_07"
+        }
+      ]
+    },
+    {
+      "src": "iccc_db",
+      "dst": "nvr_01",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R09",
+          "finding": "SYN-014",
+          "port": 8000,
+          "dst": "nvr_01"
+        }
+      ]
+    },
+    {
+      "src": "iccc_db",
+      "dst": "atcs",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R11",
+          "finding": "SYN-005",
+          "port": 443,
+          "dst": "atcs"
+        }
+      ]
+    },
+    {
+      "src": "iccc_db",
+      "dst": "signal_ctrl_a",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R11",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_a"
+        }
+      ]
+    },
+    {
+      "src": "iccc_db",
+      "dst": "signal_ctrl_b",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R11",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_b"
+        }
+      ]
+    },
+    {
+      "src": "iccc_db",
+      "dst": "scada_hmi",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R12",
+          "finding": "SYN-008",
+          "port": 5900,
+          "dst": "scada_hmi"
+        }
+      ]
+    },
+    {
+      "src": "iccc_db",
+      "dst": "plc_pump_1",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R12",
+          "finding": "CVE-2023-6448",
+          "port": 20256,
+          "dst": "plc_pump_1"
+        }
+      ]
+    },
+    {
+      "src": "iccc_db",
+      "dst": "plc_pump_2",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R12",
+          "finding": "CVE-2021-22681",
+          "port": 44818,
+          "dst": "plc_pump_2"
+        }
+      ]
+    },
+    {
+      "src": "cam_07",
+      "dst": "iccc_vms",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R10",
+          "finding": "SYN-009",
+          "port": 443,
+          "dst": "iccc_vms"
+        }
+      ]
+    },
+    {
+      "src": "nvr_01",
+      "dst": "iccc_vms",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R10",
+          "finding": "SYN-009",
+          "port": 443,
+          "dst": "iccc_vms"
+        }
+      ]
+    },
+    {
+      "src": "atcs",
+      "dst": "signal_ctrl_a",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R16",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_a"
+        }
+      ]
+    },
+    {
+      "src": "atcs",
+      "dst": "signal_ctrl_b",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R16",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_b"
+        }
+      ]
+    },
+    {
+      "src": "signal_ctrl_a",
+      "dst": "atcs",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R16",
+          "finding": "SYN-005",
+          "port": 443,
+          "dst": "atcs"
+        }
+      ]
+    },
+    {
+      "src": "signal_ctrl_a",
+      "dst": "signal_ctrl_b",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R16",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_b"
+        }
+      ]
+    },
+    {
+      "src": "signal_ctrl_b",
+      "dst": "atcs",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R16",
+          "finding": "SYN-005",
+          "port": 443,
+          "dst": "atcs"
+        }
+      ]
+    },
+    {
+      "src": "signal_ctrl_b",
+      "dst": "signal_ctrl_a",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R16",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_a"
+        }
+      ]
+    },
+    {
+      "src": "scada_hmi",
+      "dst": "plc_pump_1",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R17",
+          "finding": "CVE-2023-6448",
+          "port": 20256,
+          "dst": "plc_pump_1"
+        }
+      ]
+    },
+    {
+      "src": "scada_hmi",
+      "dst": "plc_pump_2",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R17",
+          "finding": "CVE-2021-22681",
+          "port": 44818,
+          "dst": "plc_pump_2"
+        }
+      ]
+    },
+    {
+      "src": "plc_pump_1",
+      "dst": "scada_hmi",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R17",
+          "finding": "SYN-008",
+          "port": 5900,
+          "dst": "scada_hmi"
+        }
+      ]
+    },
+    {
+      "src": "plc_pump_1",
+      "dst": "plc_pump_2",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R17",
+          "finding": "CVE-2021-22681",
+          "port": 44818,
+          "dst": "plc_pump_2"
+        }
+      ]
+    },
+    {
+      "src": "plc_pump_2",
+      "dst": "scada_hmi",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R17",
+          "finding": "SYN-008",
+          "port": 5900,
+          "dst": "scada_hmi"
+        }
+      ]
+    },
+    {
+      "src": "plc_pump_2",
+      "dst": "plc_pump_1",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R17",
+          "finding": "CVE-2023-6448",
+          "port": 20256,
+          "dst": "plc_pump_1"
+        }
+      ]
+    },
+    {
+      "src": "light_gw",
+      "dst": "atcs",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R15",
+          "finding": "SYN-005",
+          "port": 443,
+          "dst": "atcs"
+        }
+      ]
+    },
+    {
+      "src": "light_gw",
+      "dst": "signal_ctrl_a",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R15",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_a"
+        }
+      ]
+    },
+    {
+      "src": "light_gw",
+      "dst": "signal_ctrl_b",
+      "reasons": [
+        {
+          "type": "exploit",
+          "rule": "R15",
+          "finding": "SYN-006",
+          "port": 161,
+          "dst": "signal_ctrl_b"
+        }
+      ]
+    }
+  ]
+}

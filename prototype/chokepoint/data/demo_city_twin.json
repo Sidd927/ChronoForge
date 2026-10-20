@@ -1,0 +1,764 @@
+{
+ "meta": {
+  "name": "Demo City digital twin (SYNTHETIC)",
+  "note": "Fictional network for an authorized, offline proof-of-concept. Asset roles mirror typical Smart-City ICCC components. CVE-* findings are real CVE IDs whose KEV status (NVD API 2.0) and EPSS score (FIRST API) were retrieved on 2026-10-20. SYN-* findings are synthetic but representative misconfigurations. Civic-impact labels are illustrative, not real wards.",
+  "enrichment_date": "2026-10-20"
+ },
+ "zones": [
+  "INTERNET",
+  "DMZ",
+  "VENDOR_VPN",
+  "CORP_IT",
+  "ICCC",
+  "CCTV",
+  "TRAFFIC_OT",
+  "WATER_OT",
+  "STREETLIGHT_IOT"
+ ],
+ "assets": [
+  {
+   "id": "internet",
+   "name": "Internet (attacker origin)",
+   "zone": "INTERNET",
+   "services": []
+  },
+  {
+   "id": "citizen_portal",
+   "name": "Citizen services portal",
+   "zone": "DMZ",
+   "services": [
+    {
+     "port": 443,
+     "product": "Web CMS",
+     "findings": [
+      "SYN-001"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "vpn_gw",
+   "name": "Vendor SSL-VPN gateway",
+   "zone": "VENDOR_VPN",
+   "services": [
+    {
+     "port": 443,
+     "product": "FortiOS SSL-VPN",
+     "findings": [
+      "CVE-2018-13379"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "file_server",
+   "name": "Municipal file server",
+   "zone": "CORP_IT",
+   "services": [
+    {
+     "port": 445,
+     "product": "SMB file share",
+     "findings": [
+      "SYN-003"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mail_server",
+   "name": "Mail server",
+   "zone": "CORP_IT",
+   "services": [
+    {
+     "port": 443,
+     "product": "Webmail",
+     "findings": [
+      "SYN-010"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hr_portal",
+   "name": "HR / payroll portal",
+   "zone": "CORP_IT",
+   "services": [
+    {
+     "port": 8080,
+     "product": "Java app server",
+     "findings": [
+      "SYN-011"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "print_server",
+   "name": "Print server",
+   "zone": "CORP_IT",
+   "services": [
+    {
+     "port": 9100,
+     "product": "Print spooler",
+     "findings": [
+      "SYN-012"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "eng_ws",
+   "name": "Utility engineering workstation",
+   "zone": "CORP_IT",
+   "services": [
+    {
+     "port": 3389,
+     "product": "RDP",
+     "findings": [
+      "SYN-004"
+     ]
+    }
+   ],
+   "stores_creds_for": [
+    "scada_hmi",
+    "plc_pump_2"
+   ]
+  },
+  {
+   "id": "clerk_pc",
+   "name": "Municipal clerk desktop (assume-breach origin: phished)",
+   "zone": "CORP_IT",
+   "services": []
+  },
+  {
+   "id": "iccc_api",
+   "name": "ICCC integration API",
+   "zone": "ICCC",
+   "services": [
+    {
+     "port": 8443,
+     "product": "Integration middleware",
+     "findings": [
+      "SYN-002"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "iccc_vms",
+   "name": "ICCC video management system",
+   "zone": "ICCC",
+   "services": [
+    {
+     "port": 443,
+     "product": "VMS",
+     "findings": [
+      "SYN-009"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "iccc_db",
+   "name": "ICCC analytics database",
+   "zone": "ICCC",
+   "services": [
+    {
+     "port": 5432,
+     "product": "PostgreSQL",
+     "findings": [
+      "SYN-013"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cam_07",
+   "name": "Junction camera #07 (remote-view)",
+   "zone": "CCTV",
+   "services": [
+    {
+     "port": 80,
+     "product": "Hikvision IP camera",
+     "findings": [
+      "CVE-2021-36260"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nvr_01",
+   "name": "Network video recorder",
+   "zone": "CCTV",
+   "services": [
+    {
+     "port": 8000,
+     "product": "NVR",
+     "findings": [
+      "SYN-014"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "atcs",
+   "name": "Adaptive traffic control server",
+   "zone": "TRAFFIC_OT",
+   "services": [
+    {
+     "port": 443,
+     "product": "ATCS web console",
+     "findings": [
+      "SYN-005"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "signal_ctrl_a",
+   "name": "Signal controllers - Corridor A",
+   "zone": "TRAFFIC_OT",
+   "critical": true,
+   "civic_impact": "18 signalised junctions on Corridor A",
+   "services": [
+    {
+     "port": 161,
+     "product": "SNMP (signal controller)",
+     "findings": [
+      "SYN-006"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "signal_ctrl_b",
+   "name": "Signal controllers - Corridor B",
+   "zone": "TRAFFIC_OT",
+   "critical": true,
+   "civic_impact": "14 signalised junctions on Corridor B",
+   "services": [
+    {
+     "port": 161,
+     "product": "SNMP (signal controller)",
+     "findings": [
+      "SYN-006"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "scada_hmi",
+   "name": "Water SCADA HMI",
+   "zone": "WATER_OT",
+   "services": [
+    {
+     "port": 5900,
+     "product": "VNC",
+     "findings": [
+      "SYN-008"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "plc_pump_1",
+   "name": "Pumping Station 1 PLC (Unitronics)",
+   "zone": "WATER_OT",
+   "critical": true,
+   "civic_impact": "Pumping Station 1 - drinking-water supply, Zone North",
+   "services": [
+    {
+     "port": 20256,
+     "product": "Unitronics Vision PLC",
+     "findings": [
+      "CVE-2023-6448"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "plc_pump_2",
+   "name": "Pumping Station 2 PLC (Rockwell)",
+   "zone": "WATER_OT",
+   "critical": true,
+   "civic_impact": "Pumping Station 2 - drinking-water supply, Zone South",
+   "services": [
+    {
+     "port": 44818,
+     "product": "Rockwell Logix PLC",
+     "findings": [
+      "CVE-2021-22681"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "light_gw",
+   "name": "Smart-streetlight gateway",
+   "zone": "STREETLIGHT_IOT",
+   "services": [
+    {
+     "port": 22,
+     "product": "SSH",
+     "findings": [
+      "SYN-007"
+     ]
+    }
+   ]
+  }
+ ],
+ "findings": {
+  "CVE-2018-13379": {
+   "title": "FortiOS SSL-VPN path traversal (credential disclosure)",
+   "cvss": 9.1,
+   "kev": true,
+   "epss": 0.99999,
+   "fix": "patch",
+   "fix_label": "Upgrade FortiOS and reset all VPN credentials",
+   "effort_h": 3,
+   "downtime_h": 1
+  },
+  "CVE-2021-36260": {
+   "title": "Hikvision web server command injection",
+   "cvss": 9.8,
+   "kev": true,
+   "epss": 0.99869,
+   "fix": "patch",
+   "fix_label": "Update camera firmware",
+   "effort_h": 1,
+   "downtime_h": 0.5
+  },
+  "CVE-2023-6448": {
+   "title": "Unitronics Vision PLC/HMI insecure default password",
+   "cvss": 9.8,
+   "kev": true,
+   "epss": 0.02089,
+   "fix": "rotate",
+   "fix_label": "Set strong unique PLC password (VisiLogic >= 9.9.00)",
+   "effort_h": 1,
+   "downtime_h": 0.5
+  },
+  "CVE-2021-22681": {
+   "title": "Rockwell Logix insufficiently protected credentials",
+   "cvss": 9.8,
+   "kev": true,
+   "epss": 0.6363,
+   "fix": "patch",
+   "fix_label": "Apply vendor mitigations; enable CIP Security",
+   "effort_h": 6,
+   "downtime_h": 8
+  },
+  "SYN-001": {
+   "title": "Outdated CMS plugin - remote code execution",
+   "cvss": 9.8,
+   "kev": false,
+   "epss": 0.4,
+   "fix": "patch",
+   "fix_label": "Update CMS plugin",
+   "effort_h": 2,
+   "downtime_h": 0.5
+  },
+  "SYN-002": {
+   "title": "ICCC API accepts unsigned tokens",
+   "cvss": 8.1,
+   "kev": false,
+   "epss": 0.05,
+   "fix": "patch",
+   "fix_label": "Enforce token signature validation",
+   "effort_h": 4,
+   "downtime_h": 1
+  },
+  "SYN-003": {
+   "title": "Unpatched SMB service",
+   "cvss": 8.8,
+   "kev": false,
+   "epss": 0.3,
+   "fix": "patch",
+   "fix_label": "Apply OS security update",
+   "effort_h": 1,
+   "downtime_h": 1
+  },
+  "SYN-004": {
+   "title": "RDP with weak local admin password",
+   "cvss": 8.8,
+   "kev": false,
+   "epss": 0.2,
+   "fix": "rotate",
+   "fix_label": "Rotate credentials, enforce NLA + MFA",
+   "effort_h": 1,
+   "downtime_h": 0
+  },
+  "SYN-005": {
+   "title": "ATCS console default admin credentials",
+   "cvss": 9.8,
+   "kev": false,
+   "epss": 0.1,
+   "fix": "rotate",
+   "fix_label": "Rotate default admin credentials",
+   "effort_h": 1,
+   "downtime_h": 0
+  },
+  "SYN-006": {
+   "title": "SNMP write community left at default",
+   "cvss": 9.1,
+   "kev": false,
+   "epss": 0.1,
+   "fix": "rotate",
+   "fix_label": "Disable SNMP write / set SNMPv3 auth",
+   "effort_h": 4,
+   "downtime_h": 2
+  },
+  "SYN-007": {
+   "title": "Streetlight gateway default SSH credentials",
+   "cvss": 9.8,
+   "kev": false,
+   "epss": 0.1,
+   "fix": "rotate",
+   "fix_label": "Rotate SSH credentials, key-only auth",
+   "effort_h": 1,
+   "downtime_h": 0
+  },
+  "SYN-008": {
+   "title": "VNC without password on HMI",
+   "cvss": 9.8,
+   "kev": false,
+   "epss": 0.15,
+   "fix": "rotate",
+   "fix_label": "Enable VNC authentication",
+   "effort_h": 1,
+   "downtime_h": 0
+  },
+  "SYN-009": {
+   "title": "VMS outdated web framework",
+   "cvss": 8.6,
+   "kev": false,
+   "epss": 0.08,
+   "fix": "patch",
+   "fix_label": "Upgrade VMS",
+   "effort_h": 4,
+   "downtime_h": 2
+  },
+  "SYN-010": {
+   "title": "Webmail server unpatched",
+   "cvss": 9.0,
+   "kev": false,
+   "epss": 0.25,
+   "fix": "patch",
+   "fix_label": "Apply mail-server update",
+   "effort_h": 2,
+   "downtime_h": 1
+  },
+  "SYN-011": {
+   "title": "Java app server deserialization",
+   "cvss": 9.8,
+   "kev": false,
+   "epss": 0.35,
+   "fix": "patch",
+   "fix_label": "Upgrade app server",
+   "effort_h": 3,
+   "downtime_h": 1
+  },
+  "SYN-012": {
+   "title": "Print spooler privilege escalation",
+   "cvss": 8.8,
+   "kev": false,
+   "epss": 0.3,
+   "fix": "patch",
+   "fix_label": "Apply spooler patch",
+   "effort_h": 1,
+   "downtime_h": 0.5
+  },
+  "SYN-013": {
+   "title": "Database default superuser password",
+   "cvss": 9.8,
+   "kev": false,
+   "epss": 0.1,
+   "fix": "rotate",
+   "fix_label": "Rotate DB superuser password",
+   "effort_h": 1,
+   "downtime_h": 0
+  },
+  "SYN-014": {
+   "title": "NVR outdated firmware",
+   "cvss": 8.8,
+   "kev": false,
+   "epss": 0.2,
+   "fix": "patch",
+   "fix_label": "Update NVR firmware",
+   "effort_h": 2,
+   "downtime_h": 1
+  }
+ },
+ "rules": [
+  {
+   "id": "R01",
+   "src": "INTERNET",
+   "dst": "citizen_portal",
+   "ports": [
+    443
+   ],
+   "label": "Public portal"
+  },
+  {
+   "id": "R02",
+   "src": "INTERNET",
+   "dst": "vpn_gw",
+   "ports": [
+    443
+   ],
+   "label": "Vendor VPN"
+  },
+  {
+   "id": "R03",
+   "src": "INTERNET",
+   "dst": "cam_07",
+   "ports": [
+    80
+   ],
+   "label": "Port-forward for remote camera viewing"
+  },
+  {
+   "id": "R04",
+   "src": "INTERNET",
+   "dst": "plc_pump_1",
+   "ports": [
+    20256
+   ],
+   "label": "PLC exposed for vendor remote maintenance"
+  },
+  {
+   "id": "R05",
+   "src": "vpn_gw",
+   "dst": "CORP_IT",
+   "ports": "any",
+   "label": "Flat VPN into corporate IT"
+  },
+  {
+   "id": "R06",
+   "src": "citizen_portal",
+   "dst": "iccc_api",
+   "ports": [
+    8443
+   ],
+   "label": "Portal -> ICCC API"
+  },
+  {
+   "id": "R07",
+   "src": "CORP_IT",
+   "dst": "CORP_IT",
+   "ports": "any",
+   "label": "Corporate LAN"
+  },
+  {
+   "id": "R08",
+   "src": "CORP_IT",
+   "dst": "ICCC",
+   "ports": "any",
+   "label": "Corporate IT -> ICCC (broad)"
+  },
+  {
+   "id": "R09",
+   "src": "ICCC",
+   "dst": "CCTV",
+   "ports": [
+    80,
+    8000
+   ],
+   "label": "ICCC -> cameras / NVR"
+  },
+  {
+   "id": "R10",
+   "src": "CCTV",
+   "dst": "ICCC",
+   "ports": [
+    443
+   ],
+   "label": "Cameras / NVR -> VMS"
+  },
+  {
+   "id": "R11",
+   "src": "ICCC",
+   "dst": "TRAFFIC_OT",
+   "ports": [
+    443,
+    161
+   ],
+   "label": "ICCC -> traffic OT"
+  },
+  {
+   "id": "R12",
+   "src": "ICCC",
+   "dst": "WATER_OT",
+   "ports": "any",
+   "label": "ICCC -> water OT (broad)"
+  },
+  {
+   "id": "R13",
+   "src": "eng_ws",
+   "dst": "WATER_OT",
+   "ports": [
+    5900,
+    20256,
+    44818
+   ],
+   "label": "Engineering access to water OT"
+  },
+  {
+   "id": "R14",
+   "src": "CORP_IT",
+   "dst": "STREETLIGHT_IOT",
+   "ports": [
+    22
+   ],
+   "label": "IT admin -> streetlights"
+  },
+  {
+   "id": "R15",
+   "src": "STREETLIGHT_IOT",
+   "dst": "TRAFFIC_OT",
+   "ports": "any",
+   "label": "Shared pole fibre: streetlight -> traffic (flat)"
+  },
+  {
+   "id": "R16",
+   "src": "TRAFFIC_OT",
+   "dst": "TRAFFIC_OT",
+   "ports": "any",
+   "label": "Traffic OT LAN"
+  },
+  {
+   "id": "R17",
+   "src": "WATER_OT",
+   "dst": "WATER_OT",
+   "ports": "any",
+   "label": "Water OT LAN"
+  },
+  {
+   "id": "R18",
+   "src": "ICCC",
+   "dst": "ICCC",
+   "ports": "any",
+   "label": "ICCC LAN"
+  }
+ ],
+ "required_flows": [
+  {
+   "src": "internet",
+   "dst": "citizen_portal",
+   "port": 443,
+   "why": "Citizens reach public services"
+  },
+  {
+   "src": "internet",
+   "dst": "vpn_gw",
+   "port": 443,
+   "why": "Vendors reach VPN"
+  },
+  {
+   "src": "vpn_gw",
+   "dst": "mail_server",
+   "port": 443,
+   "why": "Remote staff reach webmail over VPN"
+  },
+  {
+   "src": "citizen_portal",
+   "dst": "iccc_api",
+   "port": 8443,
+   "why": "Portal shows live civic data"
+  },
+  {
+   "src": "iccc_api",
+   "dst": "atcs",
+   "port": 443,
+   "why": "ICCC reads traffic status"
+  },
+  {
+   "src": "atcs",
+   "dst": "signal_ctrl_a",
+   "port": 161,
+   "why": "ATCS retimes Corridor A signals"
+  },
+  {
+   "src": "atcs",
+   "dst": "signal_ctrl_b",
+   "port": 161,
+   "why": "ATCS retimes Corridor B signals"
+  },
+  {
+   "src": "iccc_api",
+   "dst": "scada_hmi",
+   "port": 5900,
+   "why": "ICCC water dashboard view"
+  },
+  {
+   "src": "scada_hmi",
+   "dst": "plc_pump_1",
+   "port": 20256,
+   "why": "HMI supervises Pump 1"
+  },
+  {
+   "src": "scada_hmi",
+   "dst": "plc_pump_2",
+   "port": 44818,
+   "why": "HMI supervises Pump 2"
+  },
+  {
+   "src": "nvr_01",
+   "dst": "iccc_vms",
+   "port": 443,
+   "why": "Video reaches command centre"
+  },
+  {
+   "src": "iccc_vms",
+   "dst": "cam_07",
+   "port": 80,
+   "why": "VMS pulls camera stream"
+  },
+  {
+   "src": "eng_ws",
+   "dst": "plc_pump_2",
+   "port": 44818,
+   "why": "Engineers program Pump 2"
+  },
+  {
+   "src": "clerk_pc",
+   "dst": "file_server",
+   "port": 445,
+   "why": "Staff use the file share"
+  },
+  {
+   "src": "clerk_pc",
+   "dst": "mail_server",
+   "port": 443,
+   "why": "Staff use webmail"
+  },
+  {
+   "src": "clerk_pc",
+   "dst": "hr_portal",
+   "port": 8080,
+   "why": "Staff use HR / payroll"
+  },
+  {
+   "src": "clerk_pc",
+   "dst": "print_server",
+   "port": 9100,
+   "why": "Staff print"
+  },
+  {
+   "src": "clerk_pc",
+   "dst": "iccc_vms",
+   "port": 443,
+   "why": "Staff view ICCC video dashboards"
+  },
+  {
+   "src": "eng_ws",
+   "dst": "light_gw",
+   "port": 22,
+   "why": "Engineers administer streetlight gateway"
+  }
+ ],
+ "origins": [
+  "internet",
+  "clerk_pc"
+ ]
+}
