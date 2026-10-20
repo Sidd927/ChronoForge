@@ -108,16 +108,7 @@ Exit code is `0` only if the plan passes verification. Runtime is about 0.7 s on
 
 ## How it works
 
-```mermaid
-flowchart LR
-    T["demo_city_twin.json<br/>assets · services · findings<br/>firewall rules · required flows<br/>origins · critical assets"] --> L["Twin.load()<br/>schema validation"]
-    L --> G["State.graph()<br/>rule-based attack graph"]
-    G --> P["plan_min_cut()<br/>exact branch-and-bound<br/>seeded with KEV guardrail"]
-    P --> V["verify()<br/>independent recomputation"]
-    G --> B["baselines<br/>CVSS / KEV / EPSS order<br/>+ patch-only optimum"]
-    V --> O["console report<br/>out/results.json<br/>out/attack_map.svg"]
-    B --> O
-```
+<p align="center"><img src="docs/assets/pipeline.svg" alt="Pipeline actually implemented: twin JSON, load and validate, attack graph, exact planner seeded by the KEV guardrail, independent verifier, outputs; baselines computed on the same graph" width="860"></p>
 
 All code is in [`prototype/chokepoint/chokepoint/engine.py`](prototype/chokepoint/chokepoint/engine.py), about 400 lines of standard-library Python.
 
